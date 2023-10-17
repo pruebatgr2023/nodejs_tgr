@@ -1,0 +1,1713 @@
+openapi: 3.0.0
+info:
+  title: Api Feature
+  description: Automated testing application for TGR
+  contact:
+    name: Patagonia-IT
+    url: http://www.patagonia-it.com
+    email: contacto@patagonia-it.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+
+security:
+  - CUPAuthorizer: []
+
+x-amazon-apigateway-request-validators:
+  body:
+    validateRequestParameters: false
+    validateRequestBody: true
+  params:
+    validateRequestParameters: true
+    validateRequestBody: false
+  all:
+    validateRequestParameters: true
+    validateRequestBody: true
+
+paths:
+  /application:
+    post:
+      x-amazon-apigateway-request-validator: body
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateApplication.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          application/json: |
+            {
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              },
+              "body": $input.json('$')
+            }
+        responses:
+          default:
+            statusCode: 201
+            schema:
+              $ref: '#/components/schemas/Application'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+      summary: New application
+      requestBody:
+        description: Application
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        201:
+          $ref: '#/components/responses/200Application'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetAllApplication.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/ApplicationArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get applications
+      responses:
+        200:
+          $ref: '#/components/responses/200ApplicationArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}:
+    put:
+      x-amazon-apigateway-request-validator: body
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpdateApplication.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "id": "$input.params().path.get('applicationID')",
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              },
+              "body": $input.json('$')
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/Application'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+      summary: Update Application
+      requestBody:
+        description: Update application
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        200:
+          $ref: '#/components/responses/200Application'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    delete:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DisableApplication.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "id": "$input.params().path.get('applicationID')",
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              }
+            }
+        responses:
+          default:
+            statusCode: 200
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+      summary: Delete an application
+      responses:
+        200:
+          $ref: '#/components/responses/200ResultSuccess'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetApplicationID.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "id": "$input.params().path.get('applicationID')"
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/Application'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when accessing the data on dynamo"
+                }
+      summary: Get application
+      responses:
+        200:
+          $ref: '#/components/responses/200ResultSuccess'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}/{category}/certification:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetAllCertification.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "applicationID": "$input.params().path.get('applicationID')",
+              "category": "$input.params().path.get('category')"
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/CertificationArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get Certifications by Application
+      responses:
+        200:
+          $ref: '#/components/responses/200CertificationArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    post:
+      x-amazon-apigateway-integration:
+        credentials:
+          Fn::GetAtt: [ ApiGatewayStepFunctionsRole, Arn ]
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:states:action/StartExecution
+        httpMethod: POST
+        type: aws
+        responses:
+          default:
+            statusCode: 200
+            responseTemplates:
+            # TODO: Utilizar este certificationID
+              application/json: |
+                { "certificationId": "$input.json('executionArn').split(':').get(7) }
+        requestTemplates:
+          application/json:
+            Fn::Sub: |
+              #set( $appID = "$input.params().path.get('applicationID')" )
+              #set( $category = "$input.params().path.get('category')" )
+              #set( $sfInput = """category"": ""$category""" )
+              #set( $sfInput = "$sfInput, ""applicationID"": ""$appID""" )
+              #set( $sfInput = "$sfInput, ""user"": {" )
+              #set( $sfInput = "$sfInput""id"": ""$context.authorizer.claims.sub""," )
+              #set( $sfInput = "$sfInput""email"": ""$context.authorizer.claims.email""," )
+              #set( $sfInput = "$sfInput""name"": ""$context.authorizer.claims.name""" )
+              #set( $sfInput = "$sfInput}, ""body"": $input.json('$')" )
+              {
+                  "input": "{$util.escapeJavaScript($sfInput)}",
+                  "name": "$context.requestId",
+                  "stateMachineArn": "${Workflow}"
+              }
+      summary: Start StepFunction
+      responses:
+        200:
+          $ref: '#/components/responses/200TestCaseGroupedByApplicationArray'
+        403:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}/{category}/certification/{certificationID}:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetExecutionByCertificationID.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "applicationID": "$input.params().path.get('applicationID')",
+              "certificationID": "$input.params().path.get('certificationID')"
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/CertificationArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get Certifications by Application
+      responses:
+        200:
+          $ref: '#/components/responses/200CertificationArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}/{category}/certification/{certificationID}/details:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetCertificationDetails.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "applicationID": "$input.params().path.get('applicationID')",
+              "certificationID": "$input.params().path.get('certificationID')"
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/Certification'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get Certifications by Application
+      responses:
+        200:
+          $ref: '#/components/responses/200Certification'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}/certification/{certificationID}/status:
+    get:
+      x-amazon-apigateway-integration:
+        credentials:
+          Fn::GetAtt: [ ApiGatewayStepFunctionsRole, Arn ]
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:states:action/DescribeExecution
+        httpMethod: POST
+        type: aws
+        responses:
+          default:
+            statusCode: 200
+            responseTemplates:
+              application/json: |-
+                #set ($status = $input.json('status'))
+                {
+                #if($status == '"SUCCEEDED"')
+                  "output": $util.parseJson($input.json('output')),
+                #end
+                  "status": $status
+                }
+        requestTemplates:
+          application/json:
+            Fn::Sub: |-
+              {
+                "executionArn": "arn:aws:states:${AWS::Region}:${AWS::AccountId}:execution:${Workflow.Name}:$input.params().path.get('certificationID')"
+              }
+      summary: detail workflow
+      responses:
+        200:
+          $ref: '#/components/responses/200ExecutionDetails'
+  /application/{applicationID}/{category}/environment:
+    post:
+      x-amazon-apigateway-request-validator: body
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateEnvironment.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          application/json: |
+            {
+              "category": "$input.params().path.get('category')",
+              "applicationID": "$input.params().path.get('applicationID')",
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              },
+              "body": $input.json('$')
+            }
+        responses:
+          default:
+            statusCode: 201
+            schema:
+              $ref: '#/components/schemas/DataEnvironment'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+      summary: New Data Environment
+      requestBody:
+        description: DataEnvironment
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/DataEnvironment'
+      responses:
+        201:
+          $ref: '#/components/responses/200DataEnvironment'
+        412:
+          $ref: '#/components/responses/Error'
+        417:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetAllEnvironment.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "applicationID": "$input.params().path.get('applicationID')",
+              "category": "$input.params().path.get('category')"
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/TestCaseArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get Data Environment
+      responses:
+        200:
+          $ref: '#/components/responses/200DataEnvironmentArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}/{category}/environment/{environment}:
+    put:
+      x-amazon-apigateway-request-validator: body
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpdateEnvironment.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "category": "$input.params().path.get('category')",
+              "name": "$input.params().path.get('environment')",
+              "applicationID": "$input.params().path.get('applicationID')",
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              },
+              "body": $input.json('$')
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/DataEnvironment'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+      summary: Update DataEnvironment
+      requestBody:
+        description: Update DataEnvironment
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/DataEnvironment'
+      responses:
+        200:
+          $ref: '#/components/responses/200DataEnvironment'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    delete:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DisableEnvironment.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "category": "$input.params().path.get('category')",
+              "name": "$input.params().path.get('environment')",
+              "applicationID": "$input.params().path.get('applicationID')",
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              }
+            }
+        responses:
+          default:
+            statusCode: 200
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+      summary: Delete a DataEnvironment
+      responses:
+        200:
+          $ref: '#/components/responses/200ResultSuccess'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}/{category}/testcase:
+    post:
+      x-amazon-apigateway-request-validator: body
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateTestCase.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          application/json: |
+            {
+              "applicationID": "$input.params().path.get('applicationID')",
+              "category": "$input.params().path.get('category')",
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              },
+              "body": $input.json('$')
+            }
+        responses:
+          default:
+            statusCode: 201
+            schema:
+              $ref: '#/components/schemas/TestCase'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          CUCUMBER_GHERKIN_SYNTAX:
+            statusCode: 417
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "CUCUMBER_GHERKIN_SYNTAX",
+                  "message": "The syntax isn't correct"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+      summary: New Test Case
+      requestBody:
+        description: TestCase
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/TestCase'
+      responses:
+        201:
+          $ref: '#/components/responses/200Application'
+        412:
+          $ref: '#/components/responses/Error'
+        417:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetTestCase.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "applicationID": "$input.params().path.get('applicationID')",
+              "category": "$input.params().path.get('category')"
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/TestCaseArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get Test Cases
+      responses:
+        200:
+          $ref: '#/components/responses/200TestCaseArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}/{category}/testcase/{testCaseID}:
+    put:
+      x-amazon-apigateway-request-validator: body
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpdateTestCase.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "testCaseID": "$input.params().path.get('testCaseID')",
+              "applicationID": "$input.params().path.get('applicationID')",
+              "category": "$input.params().path.get('category')",
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              },
+              "body": $input.json('$')
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/TestCase'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+          CUCUMBER_GHERKIN_SYNTAX:
+            statusCode: 417
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "CUCUMBER_GHERKIN_SYNTAX",
+                  "message": "The syntax isn't correct"
+                }
+      summary: Update Test Case
+      requestBody:
+        description: Update Test Case
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/TestCase'
+      responses:
+        200:
+          $ref: '#/components/responses/200TestCase'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    delete:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${DisableTestCase.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "testCaseID": "$input.params().path.get('testCaseID')",
+              "applicationID": "$input.params().path.get('applicationID')",
+              "category": "$input.params().path.get('category')",
+              "user": {
+                "id": "$context.authorizer.claims.sub",
+                "email": "$context.authorizer.claims.email",
+                "name": "$context.authorizer.claims.name"
+              }
+            }
+        responses:
+          default:
+            statusCode: 200
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when saving the data to dynamo"
+                }
+      summary: Delete a Test Case
+      responses:
+        200:
+          $ref: '#/components/responses/200ResultSuccess'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetTestCaseID.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "testCaseID": "$input.params().path.get('testCaseID')",
+              "applicationID": "$input.params().path.get('applicationID')",
+              "category": "$input.params().path.get('category')"
+            }
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/TestCase'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when accessing the data on dynamo"
+                }
+      summary: Get Use Cases
+      responses:
+        200:
+          $ref: '#/components/responses/200TestCase'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /application/{applicationID}/{category}/testcase/{testCaseID}/execution:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetExecution.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "id": "$input.params().path.get('testCaseID')"
+            }
+        responses:
+          default:
+            statusCode: 200
+      summary: Get Use Cases
+      responses:
+        200:
+          $ref: '#/components/responses/200ExecutionArray'
+  /application/{applicationID}/{category}/testcase/{testCaseID}/execution/{executionID}:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetExecutionID.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "id": "$input.params().path.get('executionID')"
+            }
+        responses:
+          default:
+            statusCode: 200
+      summary: Get Use Cases
+      responses:
+        200:
+          $ref: '#/components/responses/200Execution'
+  /application/{applicationID}/execution:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetExecutionByApplicationID.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "applicationID": "$input.params().path.get('applicationID')"
+            }
+        responses:
+          default:
+            statusCode: 200
+      summary: Get executions by applicationID
+      responses:
+        200:
+          $ref: '#/components/responses/200ExecutionArray'
+  /dashboard/certification:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetCertificationsLast1Month.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/OneCertificationByApplicationArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get applications
+      responses:
+        200:
+          $ref: '#/components/responses/200OneCertificationByApplicationArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /dashboard/application:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetApplicationsInLastYear.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/DataGroupedArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get applications
+      responses:
+        200:
+          $ref: '#/components/responses/200DataGroupedArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /dashboard/testcase:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetTestCasesLastMonth.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/DataGroupedArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get applications
+      responses:
+        200:
+          $ref: '#/components/responses/200DataGroupedArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /dashboard/execution:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetExecutionInLast1Week.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        responses:
+          default:
+            statusCode: 200
+            schema:
+              $ref: '#/components/schemas/DataGroupedArray'
+          DYNAMO_TABLE_NOT_FOUND:
+            statusCode: 412
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_TABLE_NOT_FOUND",
+                  "message": "There's a problem accessing to the table"
+                }
+          DYNAMO_ERROR:
+            statusCode: 500
+            schema:
+              $ref: '#/components/schemas/Error'
+            responseTemplates:
+              application/json: |
+                {
+                  "code": "DYNAMO_ERROR",
+                  "message": "An error has ocurred when reading the data to dynamo"
+                }
+      summary: Get applications
+      responses:
+        200:
+          $ref: '#/components/responses/200DataGroupedArray'
+        412:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /reports/testcase/{startDate}/{endDate}:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetTestCaseBetweenDates.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "startDate": $input.params().path.get('startDate'),
+              "endDate": $input.params().path.get('endDate')
+            }
+        responses:
+          default:
+            statusCode: 200
+      summary: Get Use Cases Between Dates
+      responses:
+        200:
+          $ref: '#/components/responses/200TestCaseGroupedByApplicationArray'
+  /reports/execution/{startDate}/{endDate}:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetExecutionBetweenDatesGroupedByApplication.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "startDate": $input.params().path.get('startDate'),
+              "endDate": $input.params().path.get('endDate')
+            }
+        responses:
+          default:
+            statusCode: 200
+      summary: Get Executions Between Dates and grouped by Application
+      responses:
+        200:
+          $ref: '#/components/responses/200ExecutionGroupedByApplicationArray'
+  /reports/certification/{startDate}/{endDate}:
+    get:
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetCertificationsBetweenDates.Arn}/invocations
+        httpMethod: POST
+        type: aws
+        requestTemplates:
+          "application/json": |
+            {
+              "startDate": $input.params().path.get('startDate'),
+              "endDate": $input.params().path.get('endDate')
+            }
+        responses:
+          default:
+            statusCode: 200
+      summary: Get Certifications Between Dates
+      responses:
+        200:
+          $ref: '#/components/responses/200CertificationsGroupedByApplicationArray'
+
+components:
+  schemas:
+    Application:
+      title: Application
+      type: object
+      properties:
+        applicationID:
+          type: string
+        applicationName:
+          type: string
+        applicationDescription:
+          type: string
+        createdByMail:
+          type: string
+        createdByName:
+          type: string
+        createdTime:
+          type: string
+        updateByMail:
+          type: string
+        updateByName:
+          type: string
+        updateTime:
+          type: string
+        available:
+          type: string
+      required:
+        - applicationName
+        - applicationDescription
+    Certification:
+      title: Certification
+      type: object
+      properties:
+        certificationID:
+          type: string
+        timeStart:
+          type: string
+        applicationID:
+          type: string
+        available:
+          type: string
+        createdByMail:
+          type: string
+        createdByName:
+          type: string
+        environment:
+          type: string
+        resultsError:
+          type: number
+        resultsFailed:
+          type: number
+        resultsSuccess:
+          type: number
+        resultsTotal:
+          type: number
+        state:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        testCasesList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCaseList'
+        timeEnd:
+          type: string
+      required:
+        - certificationID
+        - applicationID
+        - state
+        - createdByMail
+        - createdByName
+        - tags
+    DataEnvironment:
+      title: DataEnvironment
+      type: object
+      properties:
+        applicationID:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+        name:
+          type: string
+        createdByMail:
+          type: string
+        createdByName:
+          type: string
+        createdTime:
+          type: string
+        updateByMail:
+          type: string
+        updateByName:
+          type: string
+        updateTime:
+          type: string
+        available:
+          type: string
+      required:
+        - data
+        - name
+    TestCase:
+      title: TestCase
+      type: object
+      properties:
+        testCaseID:
+          type: string
+        testCaseName:
+          type: string
+        testCaseDescription:
+          type: string
+        applicationID:
+          type: string
+        createdByMail:
+          type: string
+        createdByName:
+          type: string
+        createdTime:
+          type: string
+        updateByMail:
+          type: string
+        updateByName:
+          type: string
+        updateTime:
+          type: string
+        testCaseCode:
+          type: string
+        available:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - testCaseCode
+    TestCaseList:
+      title: TestCaseList
+      type: object
+      properties:
+        certificationID:
+          type: string
+        executionID:
+          type: string
+        state:
+          type: string
+        testCaseID:
+          typer: string
+        testCaseName:
+          type: string
+    Execution:
+      title: Execution
+      type: object
+      properties:
+        executionID:
+          type: string
+        timeStart:
+          type: string
+        applicationID:
+          type: string
+        testCaseID:
+          type: string
+        available:
+          type: string
+        certificationID:
+          type: string
+        resultExecution:
+          type: string
+        state:
+          type: string
+        testCaseCode:
+          type: string
+        testCaseName:
+          type: string
+        timeEnd:
+          type: string
+      required:
+        - certificationID
+        - testCaseID
+        - applicationID
+    ApplicationArray:
+      title: ApplicationArray
+      type: object
+      properties:
+        Items:
+          $ref: '#/components/schemas/Application'
+        Count:
+          type: number
+        lastEvaluatedKey:
+          type: string
+        ScannedCount:
+          type: number
+    DataEnvironmentArray:
+      title: DataEnvironmentArray
+      type: object
+      properties:
+        Items:
+          $ref: '#/components/schemas/DataEnvironment'
+        Count:
+          type: number
+        lastEvaluatedKey:
+          type: string
+        ScannedCount:
+          type: number
+    TestCaseArray:
+      title: TestCaseArray
+      type: object
+      properties:
+        Items:
+          $ref: '#/components/schemas/TestCase'
+        Count:
+          type: number
+        lastEvaluatedKey:
+          type: string
+        ScannedCount:
+          type: number
+    CertificationArray:
+      title: Certification Array
+      type: object
+      properties:
+        Items:
+          $ref: '#/components/schemas/Certification'
+        Count:
+          type: number
+        lastEvaluatedKey:
+          type: string
+        ScannedCount:
+          type: number
+    TestCaseArrayGroupedByApplicationID:
+      title: TestCaseArrayGroupedByApplicationID
+      type: array
+      properties:
+        applicationID:
+          type: number
+        applicationName:
+          type: string
+        testCases:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCase'
+    ExecutionArray:
+      title: ExecutionArray
+      type: object
+      properties:
+        Items:
+          $ref: '#/components/schemas/Execution'
+        Count:
+          type: number
+        lastEvaluatedKey:
+          type: string
+        ScannedCount:
+          type: number
+    ExecutionGroupedByApplication:
+      title: ExecutionGroupedByApplication
+      type: object
+      properties:
+        applicationID:
+          type: number
+        executions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+    CertificationGroupedByApplication:
+      title: CertificationGroupedByApplication
+      type: object
+      properties:
+        applicationID:
+          type: number
+        applicationName:
+          type: string
+        certifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Certification'
+    OneCertificationByApplication:
+      title: OneCertificationByApplication
+      type: array
+      items:
+        $ref: '#/components/schemas/Certification'
+    DataGrouped:
+      title: DataGrouped
+      type: object
+      properties:
+        date:
+          type: string
+        count:
+          type: number
+    ExecutionGroupedByApplicationArray:
+      title: ExecutionGroupedByApplicationArray
+      type: array
+      items:
+        $ref: '#/components/schemas/ExecutionGroupedByApplication'
+    CertificationGroupedByApplicationArray:
+      title: CertificationGroupedByApplicationArray
+      type: array
+      items:
+        $ref: '#/components/schemas/CertificationGroupedByApplication'
+    OneCertificationByApplicationArray:
+      title: OneCertificationByApplicationArray
+      type: array
+      items:
+        $ref: '#/components/schemas/OneCertificationByApplication'
+    ResultSuccess:
+      title: ResultSuccess
+      type: object
+      properties:
+        cod:
+          type: number
+        desctiption:
+          type: string
+    Error:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ExecutionDetails:
+      title: Execution Details
+      type: object
+      properties:
+        output:
+          type: string
+        status:
+          type: string
+      required:
+        - status
+    DataGroupedArray:
+      title: DataGroupedArray
+      type: array
+      items:
+        $ref: '#/components/schemas/DataGrouped'
+  responses:
+    200Application:
+      description: response application
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Application'
+    200Certification:
+      description: response certification
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Certification'
+    200DataEnvironment:
+      description: response certification
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DataEnvironment'
+    200TestCase:
+      description: response Use Case
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TestCase'
+    200Execution:
+      description: response Execution
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Execution'
+    200ResultSuccess:
+      description: Successful Response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResultSuccess'
+    200ApplicationArray:
+      description: response array of applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApplicationArray'
+    200CertificationArray:
+      description: response array of certifications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CertificationArray'
+    200DataEnvironmentArray:
+      description: response array of certifications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DataEnvironmentArray'
+    200TestCaseArray:
+      description: response array of use cases
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TestCaseArray'
+    200TestCaseGroupedByApplicationArray:
+      description: response array of use cases grouped by applicationID
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TestCaseArrayGroupedByApplicationID'
+    200ExecutionArray:
+      description: response array of executions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExecutionArray'
+    200ExecutionDetails:
+      description: Execution Details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExecutionDetails'
+    200ExecutionGroupedByApplicationArray:
+      description: response array de Executions grouped by applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExecutionGroupedByApplicationArray'
+    200CertificationsGroupedByApplicationArray:
+      description: response array de Certificationes grouped by applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CertificationGroupedByApplicationArray'
+    200OneCertificationByApplicationArray:
+      description: response array de Certifications limit one by applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OneCertificationByApplicationArray'
+    200DataGroupedArray:
+      description: Count element grouped by x time
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DataGroupedArray'
+    Error:
+      description: Error Response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    CUPAuthorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: cognito_user_pools
+      x-amazon-apigateway-authorizer:
+        providerARNs:
+          - Fn::Sub: ${CognitoUserPool.Arn}
+        type: cognito_user_pools

@@ -1,0 +1,31 @@
+{
+  "name": "poc-serverless-libs",
+  "version": "1.0.0",
+  "description": "POC Lambda Libs Examples by Patagonia IT",
+  "main": "index.js",
+  "author": "Patagonia IT - Julio Villane",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/cucumber": "^6.0.1",
+    "@types/puppeteer": "^2.0.1",
+    "chai": "^4.2.0",
+    "chrome-aws-lambda": "^2.1.1",
+    "cucumber": "^6.0.5",
+    "jsonwebtoken": "8.5.1",
+    "newman": "^5.1.0",
+    "puppeteer-core": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.34",
+    "@types/jest": "^25.1.4",
+    "@types/jsonwebtoken": "8.3.3",
+    "aws-sdk": "2.428.0",
+    "puppeteer": "2.1.1"
+  },
+  "scripts": {
+    "test": "cucumber-js --format json:cucumber_report.json",
+    "test:report": "node report.js",
+    "local": "tsc && ./node_modules/cucumber/bin/cucumber-js suite/features/basic.feature --require suite/steps --require suite/pages --format json:cucumber_report.json"
+  }
+}

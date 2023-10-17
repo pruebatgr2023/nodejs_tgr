@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "op-patagoniait-backend"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-kdr7t6uay2of"
+s3_prefix = "op-patagoniait-backend"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Environment=\"dev\" CorsOrigin=\"'http://localhost:3000'\" CorsMethods=\"'*'\" CorsHeaders=\"'Content-Type,X-Amz-Date,Authorization,X-Api-Key'\" SwaggerS3File=\"./swagger.yaml\""

@@ -1,0 +1,1094 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Proyecto de Automatización de Pruebas desarrollado para la Tesorería General de la República
+  Desarrollado por Patagonia-IT
+
+Parameters:
+  Environment:
+    Description: Environment
+    Default: dev
+    Type: String
+    AllowedValues:
+      - prod
+      - qa
+      - dev
+      - lab
+    ConstraintDescription: must specify prod, test, dev
+  SwaggerS3File:
+    Description: '"swagger.yaml" file location'
+    Default: "./swagger.yaml"
+    Type: String
+  TablePrefix:
+    Description: Table Prefix
+    Type: String
+    Default: tgr-ats
+  CreateTables:
+    Description: 'It is required to create tables or not'
+    Default: "true"
+    Type: String
+    AllowedValues:
+      - "true"
+      - "false"
+    ConstraintDescription: must specify true or false
+  BucketSite:
+    Description: Bucket del front
+    Type: String
+  BucketEvidenceName:
+    Description: bucket evidence test case name
+    Type: String
+    Default: tgr-ats-evidence
+
+Globals:
+  Function:
+    Runtime: nodejs12.x
+    Timeout: 30
+    MemorySize: 1024
+    Layers:
+      - !Ref LambdaLayerLibs
+    Environment:
+      Variables:
+        ENV: !Ref Environment
+        APPLICATION_TABLE: !Sub ${TablePrefix}_${Environment}_Application
+        TEST_CASE_TABLE: !Sub ${TablePrefix}_${Environment}_Test_Case
+        CERTIFICATION_TABLE: !Sub ${TablePrefix}_${Environment}_Certification
+        EXECUTION_TABLE: !Sub ${TablePrefix}_${Environment}_Execution
+        ENVIRONMENT_TABLE: !Sub ${TablePrefix}_${Environment}_Environment
+        BUCKET_EVIDENCE: !Sub ${AWS::StackName}-${Environment}-evidence
+
+Conditions:
+  FirstTime: !Equals [!Ref CreateTables, "true"]
+
+Resources:
+  DestinationOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub "access-identity-${BucketSite}"
+
+  TheBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref BucketSite
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject
+            Effect: Allow
+            Resource: !Sub arn:aws:s3:::${BucketSite}/*
+            Principal:
+              CanonicalUser: !GetAtt DestinationOriginAccessIdentity.S3CanonicalUserId
+
+  CloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !Sub "${BucketSite}.s3.${AWS::Region}.amazonaws.com"
+            Id: siteS3Origen
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${DestinationOriginAccessIdentity}"
+          - DomainName: !Sub ${Api}.execute-api.${AWS::Region}.amazonaws.com
+            Id: !Sub tgr.${Api}.execute-api.${AWS::Region}.amazonaws.com
+            CustomOriginConfig:
+              HTTPSPort: 443
+              HTTPPort: 80
+              OriginProtocolPolicy: https-only
+        Enabled: true
+        HttpVersion: http2
+        DefaultRootObject: index.html
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 300
+            ErrorCode: 403
+            ResponseCode: 404
+            ResponsePagePath: /index.html
+        DefaultCacheBehavior:
+          Compress: true
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          TargetOriginId: siteS3Origen
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+            Headers:
+              - Origin
+          ViewerProtocolPolicy: redirect-to-https
+        CacheBehaviors:
+          - PathPattern: /api/*
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - POST
+              - PATCH
+              - DELETE
+            Compress: true
+            DefaultTTL: 0
+            MaxTTL: 0
+            MinTTL: 0
+            ForwardedValues:
+              Headers:
+                - Authorization
+              QueryString: true
+            TargetOriginId: !Sub tgr.${Api}.execute-api.${AWS::Region}.amazonaws.com
+            ViewerProtocolPolicy: redirect-to-https
+
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+          MinimumProtocolVersion: TLSv1
+
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub ${AWS::StackName}-${Environment}-cup
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireUppercase: true
+          TemporaryPasswordValidityDays: 30
+      AutoVerifiedAttributes:
+        - email
+      UsernameAttributes:
+        - email
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          Required: false
+      AdminCreateUserConfig:
+        InviteMessageTemplate:
+          EmailSubject:  "Contraseña Temporal"
+          EmailMessage: >
+            Tu usuario es {username} y la contraseña temporal es {####}
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+        # TODO cambiar a DEVELOPER y conectar con un ARN de SES válido para el envío de correos
+        # SourceArn: !Ref SESSource
+      EmailVerificationMessage: >
+        Su código de verificación es {####}.
+        Este mail se ha generado de forma automática. Favor no responder.
+      EmailVerificationSubject: "Código de verificación de registro"
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref CognitoUserPool
+      ClientName: !Sub ${AWS::StackName}-${Environment}-cupc
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ADMIN_NO_SRP_AUTH
+
+  TgrAtsDynamoDBTableApplication:
+    Type: AWS::DynamoDB::Table
+    Condition: FirstTime
+    DeletionPolicy: Retain
+    Properties:
+      TableName: !Sub ${TablePrefix}_${Environment}_Application
+      AttributeDefinitions:
+        - AttributeName: applicationID
+          AttributeType: S
+        - AttributeName: createdTime
+          AttributeType: S
+        - AttributeName: available
+          AttributeType: S
+      KeySchema:
+        - AttributeName: applicationID
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: GSI_available_createdTime
+          KeySchema:
+            - AttributeName: available
+              KeyType: HASH
+            - AttributeName: createdTime
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      BillingMode: PAY_PER_REQUEST
+
+  TgrAtsDynamoDBTableTestCase:
+    Type: AWS::DynamoDB::Table
+    Condition: FirstTime
+    DeletionPolicy: Retain
+    Properties:
+      TableName: !Sub ${TablePrefix}_${Environment}_Test_Case
+      AttributeDefinitions:
+        - AttributeName: testCaseID
+          AttributeType: S
+        - AttributeName: applicationID
+          AttributeType: S
+        - AttributeName: createdTime
+          AttributeType: S
+        - AttributeName: category
+          AttributeType: S
+        - AttributeName: available
+          AttributeType: S
+      KeySchema:
+        - AttributeName: applicationID
+          KeyType: HASH
+        - AttributeName: testCaseID
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI_category_applicationID
+          KeySchema:
+            - AttributeName: category
+              KeyType: HASH
+            - AttributeName: applicationID
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: GSI_available_createdTime
+          KeySchema:
+            - AttributeName: available
+              KeyType: HASH
+            - AttributeName: createdTime
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      BillingMode: PAY_PER_REQUEST
+
+  TgrAtsDynamoDBTableCertification:
+    Type: AWS::DynamoDB::Table
+    Condition: FirstTime
+    DeletionPolicy: Retain
+    Properties:
+      TableName: !Sub ${TablePrefix}_${Environment}_Certification
+      AttributeDefinitions:
+        - AttributeName: certificationID
+          AttributeType: S
+        - AttributeName: applicationID
+          AttributeType: S
+        - AttributeName: timeStart
+          AttributeType: S
+        - AttributeName: available
+          AttributeType: S
+        - AttributeName: category
+          AttributeType: S
+      KeySchema:
+        - AttributeName: certificationID
+          KeyType: HASH
+        - AttributeName: timeStart
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI_applicationID_category
+          KeySchema:
+            - AttributeName: applicationID
+              KeyType: HASH
+            - AttributeName: category
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: GSI_available_timeStart
+          KeySchema:
+            - AttributeName: available
+              KeyType: HASH
+            - AttributeName: timeStart
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      TimeToLiveSpecification:
+        AttributeName: ttlCertification
+        Enabled: false
+      BillingMode: PAY_PER_REQUEST
+
+  TgrAtsDynamoDBTableExecution:
+    Type: AWS::DynamoDB::Table
+    Condition: FirstTime
+    DeletionPolicy: Retain
+    Properties:
+      TableName: !Sub ${TablePrefix}_${Environment}_Execution
+      AttributeDefinitions:
+        - AttributeName: executionID
+          AttributeType: S
+        - AttributeName: testCaseID
+          AttributeType: S
+        - AttributeName: timeStart
+          AttributeType: S
+        - AttributeName: applicationID
+          AttributeType: S
+        - AttributeName: certificationID
+          AttributeType: S
+        - AttributeName: available
+          AttributeType: S
+      KeySchema:
+        - AttributeName: executionID
+          KeyType: HASH
+        - AttributeName: timeStart
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI_testCaseID
+          KeySchema:
+            - AttributeName: testCaseID
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: GSI_certificationID
+          KeySchema:
+            - AttributeName: certificationID
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: GSI_applicationID
+          KeySchema:
+            - AttributeName: applicationID
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: GSI_available_timeStart
+          KeySchema:
+            - AttributeName: available
+              KeyType: HASH
+            - AttributeName: timeStart
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      TimeToLiveSpecification:
+        AttributeName: ttlExecution
+        Enabled: false
+      BillingMode: PAY_PER_REQUEST
+
+  TgrAtsDynamoDBTableEnvironment:
+    Type: AWS::DynamoDB::Table
+    Condition: FirstTime
+    DeletionPolicy: Retain
+    Properties:
+      TableName: !Sub ${TablePrefix}_${Environment}_Environment
+      AttributeDefinitions:
+        - AttributeName: applicationID
+          AttributeType: S
+        - AttributeName: name
+          AttributeType: S
+        - AttributeName: category
+          AttributeType: S
+      KeySchema:
+        - AttributeName: applicationID
+          KeyType: HASH
+        - AttributeName: name
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI_category_applicationID
+          KeySchema:
+            - AttributeName: category
+              KeyType: HASH
+            - AttributeName: applicationID
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      BillingMode: PAY_PER_REQUEST
+
+  LambdaRoleForRuleExecution:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-${Environment}-lambda-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: 'sts:AssumeRole'
+            Principal:
+              Service: lambda.amazonaws.com
+      Policies:
+        - PolicyName: WriteCloudWatchLogs
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: 'arn:aws:logs:*:*:*'
+
+        - PolicyName: FullAccessDynamoDB
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'dynamodb:*'
+                Resource: 'arn:aws:dynamodb:us-east-1:*:*'
+
+        - PolicyName: InvokeLambda
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - 'lambda:InvokeFunction'
+              Resource: 'arn:aws:lambda:us-east-1:*:*'
+
+        - PolicyName: saveInS3
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - 's3:PutObject'
+              - 's3:PutObjectAcl'
+              Resource: 'arn:aws:s3:::*'
+
+        - PolicyName: LambdaVPCExRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                Resource: '*'
+
+  ApiGatewayStepFunctionsRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: !Join ["", ["/", !Ref "AWS::StackName", "/"]]
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowApiGatewayServiceToAssumeRole
+            Effect: Allow
+            Action:
+              - 'sts:AssumeRole'
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+      Policies:
+        - PolicyName: CallStepFunctions
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'states:StartExecution'
+                Resource: !Ref Workflow
+        - PolicyName: DescribeStepFunctionExecutions
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'states:DescribeExecution'
+                Resource: !Sub arn:aws:states:${AWS::Region}:${AWS::AccountId}:execution:${Workflow.Name}:*
+
+  StateExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - !Sub states.${AWS::Region}.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: "StatesExecutionPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "lambda:InvokeFunction"
+                Resource:
+                  - !GetAtt StartCertification.Arn
+                  - !GetAtt CreateExecutionWeb.Arn
+                  - !GetAtt CreateExecutionService.Arn
+                  - !GetAtt EndCertification.Arn
+
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: api
+      Name: !Sub ${AWS::StackName}-${Environment}-api
+      DefinitionBody:
+        'Fn::Transform':
+          Name: AWS::Include
+          Parameters:
+            Location: !Ref SwaggerS3File
+      Auth:
+        Authorizers:
+          CUPAuthorizer:
+            UserPoolArn: !GetAtt CognitoUserPool.Arn
+
+  LambdaLayerLibs:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub ${AWS::StackName}-${Environment}-lambda-layer
+      Description: Essential set of Node resources for lambdas
+      ContentUri: ./dist/layers
+      CompatibleRuntimes:
+        - nodejs12.x
+      LicenseInfo: PIT
+
+  CreateApplication:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/application
+      Handler: index.create
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application
+            Method: post
+
+  UpdateApplication:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/application
+      Handler: index.update
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}
+            Method: put
+
+  DisableApplication:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/application
+      Handler: index.disable
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Environment:
+        Variables:
+          DISABLE_TEST_CASE: !Ref DisableTestCasesByApplication
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}
+            Method: delete
+
+  GetAllApplication:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/application
+      Handler: index.getAll
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application
+            Method: get
+
+  GetApplicationID:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/application
+      Handler: index.getID
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}
+            Method: get
+
+  GetApplicationsInLastYear:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/application
+      Handler: index.getCountLastYear
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /dashboard/application
+            Method: get
+
+  StartCertification:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/certification
+      Handler: index.start
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+
+  EndCertification:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/certification
+      Handler: index.end
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+
+  GetAllCertification:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/certification
+      Handler: index.getAll
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/certification
+            Method: get
+
+  GetCertificationsBetweenDates:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/certification
+      Handler: index.getBetweenDates
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Environment:
+        Variables:
+          GET_APPLICATION_ID: !Ref GetApplicationID
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /reports/certification/{startDate}/{endDate}
+            Method: get
+
+  GetCertificationsLast1Month:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/certification
+      Handler: index.getLast1Month
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Environment:
+        Variables:
+          GET_APPLICATION_ID: !Ref GetApplicationID
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /dashboard/certification
+            Method: get
+
+  CreateEnvironment:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/environment
+      Handler: index.create
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/environment
+            Method: post
+
+  DisableEnvironment:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/environment
+      Handler: index.disable
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/environment/{environment}
+            Method: delete
+
+  GetAllEnvironment:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/environment
+      Handler: index.getAllEnvironmentByApplication
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/environment
+            Method: get
+
+  GetEnvironment:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/environment
+      Handler: index.getID
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+
+  UpdateEnvironment:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/environment
+      Handler: index.update
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/environment/{environment}
+            Method: put
+
+  GetFeatureEnvironmentWeb:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/environment
+      Handler: index.createFeature
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+
+  CreateTestCase:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/testCase
+      Handler: index.create
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/testcase
+            Method: post
+
+  UpdateTestCase:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/testCase
+      Handler: index.update
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/testcase/{testCaseID}
+            Method: put
+
+  DisableTestCase:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/testCase
+      Handler: index.disable
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/testcase/{testCaseID}
+            Method: delete
+
+  DisableTestCasesByApplication:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/testCase
+      Handler: index.disableByApplication
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+
+  GetTestCase:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/testCase
+      Handler: index.getAllByApplication
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/testcase
+            Method: get
+
+  GetTestCaseID:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/testCase
+      Handler: index.getID
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/testcase/{testCaseID}
+            Method: get
+
+  GetTestCaseBetweenDates:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/testCase
+      Handler: index.getBetweenDates
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Environment:
+        Variables:
+          GET_APPLICATION_ID: !Ref GetApplicationID
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /reports/testcase/{startDate}/{endDate}
+            Method: get
+
+  GetTestCasesLastMonth:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/testCase
+      Handler: index.getTestCasesLastMonth
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /dashboard/testcase
+            Method: get
+
+  CreateExecutionWeb:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-createExecutionWeb
+      CodeUri: dist/src/executionWeb
+      Handler: index.create
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Timeout: 900
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0bb518eb7ef6ffffd
+        SubnetIds:
+          - subnet-05a2ff1f259e6e9e5
+      Environment:
+        Variables:
+          GET_TEST_CASE_ID: !Ref GetTestCaseID
+          GET_FEATURE_WITH_ENVIRONMENT: !Ref GetFeatureEnvironmentWeb
+
+  CreateExecutionService:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-createExecutionService
+      CodeUri: dist/src/executionService
+      Handler: index.create
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Timeout: 900
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0bb518eb7ef6ffffd
+        SubnetIds:
+          - subnet-05a2ff1f259e6e9e5
+      Environment:
+        Variables:
+          GET_TEST_CASE_ID: !Ref GetTestCaseID
+          GET_ENVIRONMENT_ID: !Ref GetEnvironment
+
+  GetExecution:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/executionWeb
+      Handler: index.getAllByTestCase
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/testcase/{testCaseID}/execution
+            Method: get
+
+  GetExecutionID:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/executionWeb
+      Handler: index.getID
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/testcase/{testCaseID}/execution/{executionID}
+            Method: get
+
+  GetExecutionByApplicationID:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/executionWeb
+      Handler: index.getAllByApplication
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/execution
+            Method: get
+
+  GetExecutionByCertificationID:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/executionWeb
+      Handler: index.getCertificationID
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/certification/{certificationID}
+            Method: get
+
+  GetExecutionInLast1Week:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/executionWeb
+      Handler: index.getExecutionsInLast1Week
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /dashboard/execution
+            Method: get
+
+  GetCertificationDetails:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/certification
+      Handler: index.getCertificationDetails
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /application/{applicationID}/{category}/certification/{certificationID}/details
+            Method: get
+
+  GetExecutionBetweenDatesGroupedByApplication:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/src/executionWeb
+      Handler: index.getBetweenDatesGroupedByApplication
+      Role: !GetAtt LambdaRoleForRuleExecution.Arn
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /reports/execution/{startDate}/{endDate}
+            Method: get
+
+  Workflow:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: !Sub ${AWS::StackName}-state-machine
+      RoleArn: !GetAtt StateExecutionRole.Arn
+      DefinitionString: !Sub |
+        {
+          "Comment": "step functions to run test cases by category",
+          "StartAt": "Start",
+          "States": {
+            "Start": {
+              "Type": "Task",
+              "Resource": "${StartCertification.Arn}",
+              "Next": "ChoiceCategory"
+            },
+            "ChoiceCategory": {
+              "Type": "Choice",
+              "Choices": [
+                {
+                  "Variable": "$.type",
+                  "StringEquals": "web",
+                  "Next": "ExecutionWebMap"
+                },
+                {
+                  "Variable": "$.type",
+                  "StringEquals": "service",
+                  "Next": "ExecutionWebService"
+                }
+              ]
+            },
+            "ExecutionWebMap": {
+              "Type": "Map",
+              "MaxConcurrency": 0,
+              "Next": "End",
+              "ItemsPath": "$.body",
+              "Iterator": {
+                "StartAt": "ExecutionWeb",
+                "States": {
+                  "ExecutionWeb": {
+                    "Type": "Task",
+                    "Resource": "${CreateExecutionWeb.Arn}",
+                    "End": true
+                  }
+                }
+              }
+            },
+            "ExecutionWebService": {
+              "Type": "Map",
+              "MaxConcurrency": 0,
+              "Next": "End",
+              "ItemsPath": "$.body",
+              "Iterator": {
+                "StartAt": "ExecutionService",
+                "States": {
+                  "ExecutionService": {
+                    "Type": "Task",
+                    "Resource": "${CreateExecutionService.Arn}",
+                    "End": true
+                  }
+                }
+              }
+            },
+            "End": {
+              "Type": "Task",
+              "Resource": "${EndCertification.Arn}",
+              "End": true
+            }
+          }
+        }
+
+  BucketEvidenceTestCase:
+    Type: AWS::S3::Bucket
+    Condition: FirstTime
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-${Environment}-evidence
+
+Outputs:
+  ApiUrl:
+    Description: API URL
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/api
+  BucketSite:
+    Description: Bucket where the frontend content is updated
+    Value: !Ref BucketSite
+  ApiGateway:
+    Description: ApiGateway Identificator
+    Value: !Sub ${Api}
+  CloudFront:
+    Description: CloudFront URL
+    Value: !Sub https://${CloudFront.DomainName}
+  # nombre obligatorio (DistributionId) para invalidar la cache
+  DistributionId:
+    Description: CloudFront DistributionId
+    Value: !Ref CloudFront
+  Region:
+    Description: AWS Region
+    Value: !Ref "AWS::Region"
+  CognitoUserPoolId:
+    Description: Cognito User Pool Id
+    Value: !Ref CognitoUserPool
+  CognitoUserPoolClientId:
+    Description: Cognito User Pool Client Id
+    Value: !Ref CognitoUserPoolClient
