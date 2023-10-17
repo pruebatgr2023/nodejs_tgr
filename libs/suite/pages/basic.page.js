@@ -7,7 +7,7 @@ class BasicPage {
         try {
             this._browser = await chromium.puppeteer.launch({
                 args: chromium.args,
-                defaultViewport: { width: 1366, height: 768 },
+                defaultViewport: { width: 1920, height: 1080 },
                 executablePath: await chromium.executablePath,
                 headless: false,
             });
@@ -23,8 +23,8 @@ class BasicPage {
     }
     async close() {
         try {
-            //await this._page.close(); // antes de cualquier push dejar descomentado
-            //await this._browser.close(); // antes de cualquier push dejar descomentado
+            await this._page.close(); // antes de cualquier push dejar descomentado
+            await this._browser.close(); // antes de cualquier push dejar descomentado
         }
         catch (error) /* istanbul ignore next */ {
             throw new Error(error.toString());

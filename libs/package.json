@@ -14,7 +14,8 @@
     "cucumber": "^6.0.5",
     "jsonwebtoken": "8.5.1",
     "newman": "^5.1.0",
-    "puppeteer-core": "^2.1.1"
+    "puppeteer-core": "^2.1.1",
+    "selenium-webdriver": "^4.14.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.34",
