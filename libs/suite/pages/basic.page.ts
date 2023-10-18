@@ -23,16 +23,16 @@ export class BasicPage {
       await this._page.setUserAgent("Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10136");
       //await this._page.setViewport({ width: 1366, height: 768 })
     } catch (error) /* istanbul ignore next */ {
-      throw new Error(error.toString());
+      throw new Error(toString());
     }
   }
 
   public async close() {
     try {
-      //await this._page.close(); // antes de cualquier push dejar descomentado
-      //await this._browser.close(); // antes de cualquier push dejar descomentado
+      await this._page.close(); // antes de cualquier push dejar descomentado
+      await this._browser.close(); // antes de cualquier push dejar descomentado
     } catch (error) /* istanbul ignore next */ {
-      throw new Error(error.toString());
+      throw new Error(toString());
     }
   }
 
