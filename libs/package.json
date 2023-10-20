@@ -27,6 +27,9 @@
   "scripts": {
     "test": "cucumber-js --format json:cucumber_report.json",
     "test:report": "node report.js",
-    "local": "tsc && ./node_modules/cucumber/bin/cucumber-js suite/features/basic.feature --require suite/steps --require suite/pages --format json:cucumber_report.json"
+    "local": "tsc && ./node_modules/cucumber/bin/cucumber-js suite/features/basic.feature --require suite/steps --require suite/pages --format json:cucumber_report.json",
+    "script": "node ./node_modules/cucumber/bin/cucumber-js suite/features/Web_TGR_menu_declaracion_pago_simultaneo/despliegue_concesiones_maritimas.feature --require suite/steps --require suite/pages --format json:cucumber_report_concesiones.json",
+    "script:1": "node ./node_modules/cucumber/bin/cucumber-js suite/features/Web_TGR_menu_declaracion_pago_simultaneo/despliegue_sernapesca.feature --require suite/steps --require suite/pages --format json:cucumber_report_otro.json",
+    "script:all": "npm run script && npm run script:1"
   }
 }
