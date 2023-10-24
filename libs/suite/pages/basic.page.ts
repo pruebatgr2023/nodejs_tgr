@@ -12,9 +12,9 @@ export class BasicPage {
     try {
       this._browser = await chromium.puppeteer.launch({
         args: chromium.args,
-        defaultViewport: { width: 1366, height: 768 },
+        defaultViewport: { width: 1920, height: 1080 },
         executablePath: await chromium.executablePath,
-        headless: false, // antes de cualquier push dejar en true
+        headless: true, // antes de cualquier push dejar en true
         // slowMo: 100
       });
       //this._page = await this._browser.newPage();

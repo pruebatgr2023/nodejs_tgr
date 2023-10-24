@@ -9,7 +9,7 @@ class BasicPage {
                 args: chromium.args,
                 defaultViewport: { width: 1920, height: 1080 },
                 executablePath: await chromium.executablePath,
-                headless: false,
+                headless: true, //true para ejecutar sin grafica -- false para ejecutar ambiente grafico
             });
             //this._page = await this._browser.newPage();
             this._pages = await this._browser.pages();
