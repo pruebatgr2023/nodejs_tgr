@@ -6,7 +6,7 @@ const cucumber_1 = require("cucumber");
 const page = new basic_page_1.BasicPage();
 exports.page = page;
 /* {"cookies":[{"name":"cookie", "value":"mundo", "domain":"nr-data.net", "url":"https://bbrr.env.tegere.info", "secure":true, "sameSite":"None" }, {"name":"cookie2", "value":"2", "domain":"nr-data.net", "url":"https://bbrr.env.tegere.info", "secure":true, "sameSite":"None"}]} */
-cucumber_1.setWorldConstructor(class TestWorld {
+(0, cucumber_1.setWorldConstructor)(class TestWorld {
     constructor({ parameters, attach }) {
         this.attach = attach;
         /* this.cookies = parameters.cookies
@@ -17,15 +17,15 @@ cucumber_1.setWorldConstructor(class TestWorld {
         this.executionID = parameters.executionID;
     }
 });
-cucumber_1.Before(async function () {
+(0, cucumber_1.Before)(async function () {
     await page.setHeaders(this.executionID, this.bucketKey);
     //await page.setCookies(this.name, this.value, this.domain);
 });
-cucumber_1.BeforeAll({ timeout: 100 * 1000 }, async () => {
+(0, cucumber_1.BeforeAll)({ timeout: 1000 * 1000 }, async () => {
     await page.init();
 });
 /* istanbul ignore next */
-cucumber_1.After(async function (scenario) {
+(0, cucumber_1.After)(async function (scenario) {
     //console.log(this.cookies)
     //await page.setCookies(this.cookies);
     if (scenario.result.status === cucumber_1.Status.FAILED) {
@@ -34,7 +34,7 @@ cucumber_1.After(async function (scenario) {
         this.attach(JSON.stringify({ screenshot_error: `${name_img}.png` }));
     }
 });
-cucumber_1.AfterAll({ timeout: 100 * 1000 }, async () => {
+(0, cucumber_1.AfterAll)({ timeout: 1000 * 1000 }, async () => {
     await page.close();
 });
 //6bagshqvei.execute-api.us-east-1.amazonaws.com

@@ -9,7 +9,8 @@ class BasicPage {
                 args: chromium.args,
                 defaultViewport: { width: 1920, height: 1080 },
                 executablePath: await chromium.executablePath,
-                headless: true, //true para ejecutar sin grafica -- false para ejecutar ambiente grafico
+                headless: true, // antes de cualquier push dejar en true
+                // slowMo: 100
             });
             //this._page = await this._browser.newPage();
             this._pages = await this._browser.pages();
@@ -18,7 +19,7 @@ class BasicPage {
             //await this._page.setViewport({ width: 1366, height: 768 })
         }
         catch (error) /* istanbul ignore next */ {
-            throw new Error(error.toString());
+            throw new Error(toString());
         }
     }
     async close() {
@@ -27,7 +28,7 @@ class BasicPage {
             await this._browser.close(); // antes de cualquier push dejar descomentado
         }
         catch (error) /* istanbul ignore next */ {
-            throw new Error(error.toString());
+            throw new Error(toString());
         }
     }
     async goto(url) {
