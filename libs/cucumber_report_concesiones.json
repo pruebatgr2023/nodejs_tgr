@@ -1,0 +1,136 @@
+[
+  {
+    "description": "concesiones maritimas",
+    "keyword": "Feature",
+    "name": "despliegue de link",
+    "line": 1,
+    "id": "despliegue-de-link",
+    "tags": [],
+    "uri": "suite\\features\\Web_TGR_menu_declaracion_pago_simultaneo\\despliegue_concesiones_maritimas.feature",
+    "elements": [
+      {
+        "id": "despliegue-de-link;reconocemos-elementos-menu-princial,-ingresamos-a-pago-y-reconocemos-links-del-menú-multas,-patentes-y-otros",
+        "keyword": "Scenario",
+        "line": 3,
+        "name": "reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú multas, patentes y otros",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "match": {
+              "location": "suite\\support\\hooks.js:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "que se encuentra en la url \"https://www.tgr.cl/\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:8"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8690000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 5,
+            "name": "se espera \"2\" segundos",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:144"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2002000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 6,
+            "name": "se cliquea el selector \"#menu-item-949 > a\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 64000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 7,
+            "name": "se cliquea el selector \"#menu-item-2486 > a\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 107000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 8,
+            "name": "se cliquea el selector \"#menu-item-15697 > a > span\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 94000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "que se encontró un elemento \"body > div:nth-child(16) > div:nth-child(1) > h1\" con el texto \"Concesiones Marítimas\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2635000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 10,
+            "name": "que se encontró un elemento \"body > app-root > app-dps > div > div\" en el frame \"#tgr-sp-contenedor-iframe > iframe\" con el texto \"FORMULARIO DECLARACION Y PAGO SIMULTANEO\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:170"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4143000000
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "match": {
+              "location": "suite\\support\\hooks.js:28"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
