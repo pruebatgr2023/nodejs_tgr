@@ -1,15 +1,14 @@
 [
   {
-    "description": "sernapesca",
     "keyword": "Feature",
-    "name": "despliegue de link",
+    "name": "linck Menu Princial - pago multas, patentes o tros",
     "line": 1,
-    "id": "despliegue-de-link",
+    "id": "linck-menu-princial---pago-multas,-patentes-o-tros",
     "tags": [],
-    "uri": "suite\\features\\test_produccion\\despliegue_sernapesca.feature",
+    "uri": "suite\\features\\test_produccion\\menu_pagos_multas_patentes_otro.feature",
     "elements": [
       {
-        "id": "despliegue-de-link;reconocemos-elementos-menu-princial,-ingresamos-a-pago-y-reconocemos-links-del-menú-multas,-patentes-y-otros",
+        "id": "linck-menu-princial---pago-multas,-patentes-o-tros;reconocemos-elementos-menu-princial,-ingresamos-a-pago-y-reconocemos-links-del-menú-multas,-patentes-y-otros",
         "keyword": "Scenario",
         "line": 3,
         "name": "reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú multas, patentes y otros",
@@ -24,7 +23,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 3000000
+              "duration": 1000000
             }
           },
           {
@@ -37,7 +36,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 6534000000
+              "duration": 3906000000
             }
           },
           {
@@ -50,7 +49,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 2016000000
+              "duration": 2001000000
             }
           },
           {
@@ -63,7 +62,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 53000000
+              "duration": 51000000
             }
           },
           {
@@ -76,14 +75,482 @@
             },
             "result": {
               "status": "passed",
-              "duration": 58000000
+              "duration": 54000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "que se encontró un elemento \"#menu-item-11631 > a > span\" con el texto \"Multas de la Comisión del Mercado Financiero\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "que se encontró un elemento \"#menu-item-11632 > a > span\" con el texto \"Multas de SERNAC\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "que se encontró un elemento \"#menu-item-15130 > a > span\" con el texto \"Multas de FONASA\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "que se encontró un elemento \"#menu-item-9788 > a > span\" con el texto \"Patentes Derechos de Agua No Utilizados\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "que se encontró un elemento \"#menu-item-16161 > a > span\" con el texto \"Oferta Económica Casinos Ley N° 19.995/2005\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "que se encontró un elemento \"#menu-item-16162 > a > span\" con el texto \"Tribunal de Cuentas\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "que se encontró un elemento \"#menu-item-16164 > a > span\" con el texto \"Notarios y Martilleros Públicos\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "que se encontró un elemento \"#menu-item-4842 > a > span\" con el texto \"Patentes Mineras\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "que se encontró un elemento \"#menu-item-16741 > a > span\" con el texto \"Multas Aplicadas a Casinos\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "que se encontró un elemento \"#menu-item-15895 > a > span\" con el texto \"Multas Juzgados\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "que se encontró un elemento \"#menu-item-15690 > a > span\" con el texto \"Multas SUBTEL\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "que se encontró un elemento \"#menu-item-15694 > a > span\" con el texto \"Multas Ley de Transparencia\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "que se encontró un elemento \"#menu-item-15683 > a > span\" con el texto \"Pago de Multas Aplicadas por Servicio Público\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 23,
+            "name": "que se encontró un elemento \"#menu-item-16938 > a > span\" con el texto \"Pagar cuotas de deuda Ex CORA\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "que se encontró un elemento \"#menu-item-17223 > a > span\" con el texto \"Pagar cuotas de Crédito Fiscal Universitario\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 25,
+            "name": "que se encontró un elemento \"#menu-item-16757 > a > span\" con el texto \"Solicitar consignar deudas morosas por oferta de pago rechazada\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "que se encontró un elemento \"#menu-item-16939 > a > span\" con el texto \"Pagar Arrendamiento de Predios Urbanos\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "que se encontró un elemento \"#menu-item-16936 > a > span\" con el texto \"Pagar en Moneda Extranjera\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 29,
+            "name": "que se encontró un elemento \"#menu-item-15639 > a > span\" con el texto \"Subsidio de Ley 20.378\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 30,
+            "name": "que se encontró un elemento \"#menu-item-15629 > a > span\" con el texto \"SERNAPESCA Pago Informe Ambiental\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 31,
+            "name": "que se encontró un elemento \"#menu-item-15697 > a > span\" con el texto \"Concesiones Marítimas\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 32,
+            "name": "que se encontró un elemento \"#menu-item-16474 > a > span\" con el texto \"Reintegro de Instituciones\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "que se encontró un elemento \"#menu-item-22135 > a > span\" con el texto \"Recaudación Fondo de Estabilización de Tarifas Eléctricas Ley 21.472\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "que se encontró un elemento \"#menu-item-9635 > a > span\" con el texto \"Ver Todos los Pagos con Declaración\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 35,
+            "name": "se espera \"2\" segundos",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:144"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2021000000
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 8,
-            "name": "se cliquea el selector \"#menu-item-15629 > a > span\"",
+            "line": 37,
+            "name": "se cliquea el selector \"#menu-item-11631 > a > span\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 60000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "que se encontró un elemento \"#post-11619 > div > div > div > div > section > div > div > div > div > div > section.elementor-section.elementor-inner-section.elementor-element.elementor-element-18b0b23.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div.elementor-element.elementor-element-8e25831.elementor-widget.elementor-widget-heading > div > h1\" con el texto \"Nueva Forma de Pagar tus Multas y Patentes\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2109000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "que se encontró un elemento \"#post-11619 > div > div > div > div > section > div > div > div > div > div > section.elementor-section.elementor-inner-section.elementor-element.elementor-element-18b0b23.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div.elementor-element.elementor-element-dfaf347.elementor-widget.elementor-widget-text-editor > div > div > p\" con el texto \"Te facilitamos la forma de pagar tus multas y patentes de los distintos servicios públicos.\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 61000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 40,
+            "name": "se espera \"2\" segundos",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:144"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2002000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 42,
+            "name": "se cliquea el selector \"#menu-item-949 > a\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 47000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 43,
+            "name": "se cliquea el selector \"#menu-item-2486 > a\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 50000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 44,
+            "name": "se cliquea el selector \"#menu-item-11632 > a > span\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 57000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 45,
+            "name": "que se encontró un elemento \"#post-11619 > div > div > div > div > section > div > div > div > div > div > section.elementor-section.elementor-inner-section.elementor-element.elementor-element-18b0b23.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div.elementor-element.elementor-element-8e25831.elementor-widget.elementor-widget-heading > div > h1\" con el texto \"Nueva Forma de Pagar tus Multas y Patentes\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1885000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 46,
+            "name": "que se encontró un elemento \"#post-11619 > div > div > div > div > section > div > div > div > div > div > section.elementor-section.elementor-inner-section.elementor-element.elementor-element-18b0b23.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div.elementor-element.elementor-element-dfaf347.elementor-widget.elementor-widget-text-editor > div > div > p\" con el texto \"Te facilitamos la forma de pagar tus multas y patentes de los distintos servicios públicos.\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 873000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 47,
+            "name": "se espera \"2\" segundos",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:144"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2011000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 49,
+            "name": "se cliquea el selector \"#menu-item-949 > a\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 49000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 50,
+            "name": "se cliquea el selector \"#menu-item-2486 > a\"",
             "match": {
               "location": "suite\\steps\\simple.steps.js:38"
             },
@@ -94,41 +561,54 @@
           },
           {
             "arguments": [],
-            "keyword": "And ",
-            "line": 9,
-            "name": "que se encontró un elemento \"body > div:nth-child(16) > div:nth-child(1) > h1\" con el texto \"SERNAPESCA Pago Informe Ambiental\"",
+            "keyword": "When ",
+            "line": 51,
+            "name": "se cliquea el selector \"#menu-item-15130 > a > span\"",
             "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
+              "location": "suite\\steps\\simple.steps.js:38"
             },
             "result": {
               "status": "passed",
-              "duration": 2686000000
+              "duration": 61000000
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 10,
-            "name": "se espera \"5\" segundos",
+            "line": 52,
+            "name": "se espera \"2\" segundos",
             "match": {
               "location": "suite\\steps\\simple.steps.js:144"
             },
             "result": {
               "status": "passed",
-              "duration": 5001000000
+              "duration": 2003000000
             }
           },
           {
             "arguments": [],
-            "keyword": "Given ",
-            "line": 11,
-            "name": "que se encontró un elemento \"body > div:nth-child(19) > div\" en el frame \"#tgr-sp-contenedor-iframe > iframe\" con el texto \"Formulario de Declaración y Pago Simultáneo\"",
+            "keyword": "And ",
+            "line": 53,
+            "name": "que se encontró un elemento \"#id-div-idp-titulo > b\" con el texto \"Te damos la bienvenida\"",
             "match": {
-              "location": "suite\\steps\\simple.steps.js:170"
+              "location": "suite\\steps\\simple.steps.js:102"
             },
             "result": {
               "status": "passed",
-              "duration": 13000000
+              "duration": 1020000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 54,
+            "name": "se cliquea el elemento de la pagina \"#id-a-idp-sitioTgr > label > strong\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:32"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 230000000
             }
           },
           {
@@ -139,7 +619,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 0
             }
           }
         ]

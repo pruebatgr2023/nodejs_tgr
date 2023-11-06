@@ -53,25 +53,26 @@ Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos l
     And que se encontró un elemento "#id-div-idp-titulo > b" con el texto "Te damos la bienvenida"
     When se cliquea el elemento de la pagina "#id-a-idp-sitioTgr > label > strong"
 # despliegue de Patentes Derechos de Agua No Utilizados
-    When se cliquea el selector "#menu-item-949 > a"  
-    When se cliquea el selector "#menu-item-2486 > a"
-    When se cliquea el selector "#menu-item-9788 > a > span"
-    And que se encontró un elemento "#post-9781 > div > div > div > div > section.elementor-section.elementor-top-section.elementor-element.elementor-element-29361f8c.elementor-section-stretched.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div > div > h1:nth-child(2)" con el texto "Pago de Patentes Derechos de Aguas No Utilizados"
-    When se cliquea el elemento de la pagina "#tgr-wp-patentesagua-pagoimpuestosfiscales"
-    And se espera "2" segundos
-    And que se encontró un elemento "#id-div-idp-titulo > b" con el texto "Te damos la bienvenida"
-    When se cliquea el elemento de la pagina "#id-a-idp-sitioTgr > label > strong"
-    And se espera "2" segundos
+  #  When se cliquea el selector "#menu-item-949 > a"  
+  #  When se cliquea el selector "#menu-item-2486 > a"
+  #  And se espera "5" segundos
+  #  When se cliquea el selector "#menu-item-9788 > a > span"
+  #  And que se encontró un elemento "#post-9781 > div > div > div > div > section.elementor-section.elementor-top-section.elementor-element.elementor-element-29361f8c.elementor-section-stretched.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div > div > h1:nth-child(2)" con el texto "Pago de Patentes Derechos de Aguas No Utilizados"
+  #  When se cliquea el elemento de la pagina "#tgr-wp-patentesagua-pagoimpuestosfiscales"
+  #  And se espera "2" segundos
+  #  And que se encontró un elemento "#id-div-idp-titulo > b" con el texto "Te damos la bienvenida"
+  #  When se cliquea el elemento de la pagina "#id-a-idp-sitioTgr > label > strong"
+  #  And se espera "2" segundos
 # despliegue de Oferta Económica Casinos Ley N° 19.995/2005
-    When se cliquea el selector "#menu-item-949 > a"  
-    When se cliquea el selector "#menu-item-2486 > a"
-    When se cliquea el selector "#menu-item-16161 > a > span"
-    And que se encontró un elemento "body > div:nth-child(16) > div:nth-child(1) > h1" con el texto "Oferta Económica Casinos"
-    Given que se encontró un elemento "body > app-root > app-dps > div > div" en el frame "#tgr-sp-contenedor-iframe > iframe" con el texto "FORMULARIO DECLARACION Y PAGO SIMULTANEO"
+  #  When se cliquea el selector "#menu-item-949 > a"  
+  # When se cliquea el selector "#menu-item-2486 > a"
+  #  When se cliquea el selector "#menu-item-16161 > a > span"
+   # And que se encontró un elemento "body > div:nth-child(16) > div:nth-child(1) > h1" con el texto "Oferta Económica Casinos"
+   # Given que se encontró un elemento "body > app-root > app-dps > div > div" en el frame "#tgr-sp-contenedor-iframe > iframe" con el texto "FORMULARIO DECLARACION Y PAGO SIMULTANEO"
 # despliegue de tribunal de cuentas
-    When se cliquea el selector "#menu-item-949 > a"  
-    When se cliquea el selector "#menu-item-2486 > a"
-    When se cliquea el selector "#menu-item-16162 > a > span"
-    And que se encontró un elemento "body > div:nth-child(16) > div:nth-child(1) > h1" con el texto "Tribunal de Cuentas"
-    Given que se encontró un elemento "body > app-root > app-dps > form > table > tr > td:nth-child(1) > span.encabezadoTituloTGR" en el frame "#tgr-sp-contenedor-iframe > iframe" con el texto "TESORERÍA GENERAL DE LA REPÚBLICA"
+  #  When se cliquea el selector "#menu-item-949 > a"  
+  #  When se cliquea el selector "#menu-item-2486 > a"
+  #  When se cliquea el selector "#menu-item-16162 > a > span"
+  #  And que se encontró un elemento "body > div:nth-child(16) > div:nth-child(1) > h1" con el texto "Tribunal de Cuentas"
+  #  Given que se encontró un elemento "body > app-root > app-dps > form > table > tr > td:nth-child(1) > span.encabezadoTituloTGR" en el frame "#tgr-sp-contenedor-iframe > iframe" con el texto "TESORERÍA GENERAL DE LA REPÚBLICA"
 
