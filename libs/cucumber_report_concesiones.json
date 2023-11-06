@@ -1,12 +1,12 @@
 [
   {
-    "description": "concesiones maritimas",
+    "description": "sernapesca",
     "keyword": "Feature",
     "name": "despliegue de link",
     "line": 1,
     "id": "despliegue-de-link",
     "tags": [],
-    "uri": "suite\\features\\Web_TGR_menu_declaracion_pago_simultaneo\\despliegue_concesiones_maritimas.feature",
+    "uri": "suite\\features\\test_produccion\\despliegue_sernapesca.feature",
     "elements": [
       {
         "id": "despliegue-de-link;reconocemos-elementos-menu-princial,-ingresamos-a-pago-y-reconocemos-links-del-menú-multas,-patentes-y-otros",
@@ -24,7 +24,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 2000000
+              "duration": 3000000
             }
           },
           {
@@ -37,7 +37,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 8690000000
+              "duration": 6534000000
             }
           },
           {
@@ -50,7 +50,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 2002000000
+              "duration": 2016000000
             }
           },
           {
@@ -63,7 +63,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 64000000
+              "duration": 53000000
             }
           },
           {
@@ -76,46 +76,59 @@
             },
             "result": {
               "status": "passed",
-              "duration": 107000000
+              "duration": 58000000
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "se cliquea el selector \"#menu-item-15697 > a > span\"",
+            "name": "se cliquea el selector \"#menu-item-15629 > a > span\"",
             "match": {
               "location": "suite\\steps\\simple.steps.js:38"
             },
             "result": {
               "status": "passed",
-              "duration": 94000000
+              "duration": 48000000
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
             "line": 9,
-            "name": "que se encontró un elemento \"body > div:nth-child(16) > div:nth-child(1) > h1\" con el texto \"Concesiones Marítimas\"",
+            "name": "que se encontró un elemento \"body > div:nth-child(16) > div:nth-child(1) > h1\" con el texto \"SERNAPESCA Pago Informe Ambiental\"",
             "match": {
               "location": "suite\\steps\\simple.steps.js:102"
             },
             "result": {
               "status": "passed",
-              "duration": 2635000000
+              "duration": 2686000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "se espera \"5\" segundos",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:144"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5001000000
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 10,
-            "name": "que se encontró un elemento \"body > app-root > app-dps > div > div\" en el frame \"#tgr-sp-contenedor-iframe > iframe\" con el texto \"FORMULARIO DECLARACION Y PAGO SIMULTANEO\"",
+            "line": 11,
+            "name": "que se encontró un elemento \"body > div:nth-child(19) > div\" en el frame \"#tgr-sp-contenedor-iframe > iframe\" con el texto \"Formulario de Declaración y Pago Simultáneo\"",
             "match": {
               "location": "suite\\steps\\simple.steps.js:170"
             },
             "result": {
               "status": "passed",
-              "duration": 4143000000
+              "duration": 13000000
             }
           },
           {

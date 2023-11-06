@@ -8,5 +8,4 @@ Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos l
     When se cliquea el selector "#menu-item-15629 > a > span"
     And que se encontró un elemento "body > div:nth-child(16) > div:nth-child(1) > h1" con el texto "SERNAPESCA Pago Informe Ambiental"
     And se espera "5" segundos
-    Given que se encontró un elemento "body > div:nth-child(17)" en el frame "#tgr-sp-contenedor-iframe > iframe" con el texto "Formulario de Declaración y Pago Simultáneo"
-
+    Given que se encontró un elemento "body > div:nth-child(19) > div" en el frame "#tgr-sp-contenedor-iframe > iframe" con el texto "Formulario de Declaración y Pago Simultáneo"
