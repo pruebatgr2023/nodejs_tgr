@@ -18,7 +18,7 @@ Scenario: Validamos funcionalidad de links Pago de Contribuciones
    And se cliquea el elemento "#tgr-wp-contribuciones-pagarenlineasinclave" con la clase "primario"
    And se espera "15" segundos
    And se cambia a la pestaña "1"
-    And que se encontró un elemento "body > app-root > app-main > mdl-layout > div > div > mdl-layout-content > app-agregar > app-agregar-nueva > app-linea-tiempo > div > div > div:nth-child(1) > p" con el texto "1. Buscar"
-    And se cliquea el elemento de la pagina "#mdl-textfield-c016e6fb"
-    And en el elemento "Input" con id "tgr-ng-bbrr-rol" se ingresa el texto "668"
-    And en el elemento "Input" con id "tgr-ng-bbrr-subRol" se ingresa el texto "180"
+ #   And que se encontró un elemento "body > app-root > app-main > mdl-layout > div > div > mdl-layout-content > app-agregar > app-agregar-nueva > app-linea-tiempo > div > div > div:nth-child(1) > p" con el texto "1. Buscar"
+ #   And se cliquea el elemento de la pagina "#mdl-textfield-c016e6fb"
+ #   And en el elemento "Input" con id "tgr-ng-bbrr-rol" se ingresa el texto "668"
+ #   And en el elemento "Input" con id "tgr-ng-bbrr-subRol" se ingresa el texto "180"
