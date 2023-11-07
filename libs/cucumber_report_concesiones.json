@@ -1,17 +1,18 @@
 [
   {
+    "description": "          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Pago de Contribuciones",
     "keyword": "Feature",
-    "name": "linck Menu Princial - pago multas, patentes o tros",
+    "name": "link Pago - PagosImpuestos - CONTRIBUCIONES - PagoContribuciones Ingreso_Contribuciones_SinClave",
     "line": 1,
-    "id": "linck-menu-princial---pago-multas,-patentes-o-tros",
+    "id": "link-pago---pagosimpuestos---contribuciones---pagocontribuciones-ingreso_contribuciones_sinclave",
     "tags": [],
-    "uri": "suite\\features\\test_produccion\\menu_pagos_multas_patentes_otro.feature",
+    "uri": "suite\\features\\test_produccion\\1.1.-link_PagoContribuciones.feature",
     "elements": [
       {
-        "id": "linck-menu-princial---pago-multas,-patentes-o-tros;reconocemos-elementos-menu-princial,-ingresamos-a-pago-y-reconocemos-links-del-menú-multas,-patentes-y-otros",
+        "id": "link-pago---pagosimpuestos---contribuciones---pagocontribuciones-ingreso_contribuciones_sinclave;validamos-funcionalidad-de-links-pago-de-contribuciones",
         "keyword": "Scenario",
-        "line": 3,
-        "name": "reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú multas, patentes y otros",
+        "line": 4,
+        "name": "Validamos funcionalidad de links Pago de Contribuciones",
         "tags": [],
         "type": "scenario",
         "steps": [
@@ -29,86 +30,60 @@
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 4,
+            "line": 5,
             "name": "que se encuentra en la url \"https://www.tgr.cl/\"",
             "match": {
               "location": "suite\\steps\\simple.steps.js:8"
             },
             "result": {
               "status": "passed",
-              "duration": 3906000000
+              "duration": 4498000000
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 5,
-            "name": "se espera \"2\" segundos",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:144"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 2001000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
             "line": 6,
-            "name": "se cliquea el selector \"#menu-item-949 > a\"",
+            "name": "que se encontró un elemento \"#menu-item-949 > a > span:nth-child(1)\" con el texto \"Pagos\"",
             "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
+              "location": "suite\\steps\\simple.steps.js:102"
             },
             "result": {
               "status": "passed",
-              "duration": 51000000
+              "duration": 356000000
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
             "line": 7,
-            "name": "se cliquea el selector \"#menu-item-2486 > a\"",
+            "name": "que se cliquea el elemento \"span\" con el texto \"Pagos\"",
             "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
+              "location": "suite\\steps\\simple.steps.js:20"
             },
             "result": {
               "status": "passed",
-              "duration": 54000000
+              "duration": 164000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "se espera \"1\" segundos",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:144"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1004000000
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
             "line": 9,
-            "name": "que se encontró un elemento \"#menu-item-11631 > a > span\" con el texto \"Multas de la Comisión del Mercado Financiero\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 10000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 10,
-            "name": "que se encontró un elemento \"#menu-item-11632 > a > span\" con el texto \"Multas de SERNAC\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 11,
-            "name": "que se encontró un elemento \"#menu-item-15130 > a > span\" con el texto \"Multas de FONASA\"",
+            "name": "que se encontró un elemento \"#menu-item-2485 > a > span:nth-child(1)\" con el texto \"Pagos de Impuestos\"",
             "match": {
               "location": "suite\\steps\\simple.steps.js:102"
             },
@@ -120,348 +95,10 @@
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 12,
-            "name": "que se encontró un elemento \"#menu-item-9788 > a > span\" con el texto \"Patentes Derechos de Agua No Utilizados\"",
+            "line": 10,
+            "name": "que se cliquea el elemento \"span\" con el texto \"Pagos de Impuestos\"",
             "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 5000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 13,
-            "name": "que se encontró un elemento \"#menu-item-16161 > a > span\" con el texto \"Oferta Económica Casinos Ley N° 19.995/2005\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 14,
-            "name": "que se encontró un elemento \"#menu-item-16162 > a > span\" con el texto \"Tribunal de Cuentas\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 5000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 15,
-            "name": "que se encontró un elemento \"#menu-item-16164 > a > span\" con el texto \"Notarios y Martilleros Públicos\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 16,
-            "name": "que se encontró un elemento \"#menu-item-4842 > a > span\" con el texto \"Patentes Mineras\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 3000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 17,
-            "name": "que se encontró un elemento \"#menu-item-16741 > a > span\" con el texto \"Multas Aplicadas a Casinos\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 3000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 18,
-            "name": "que se encontró un elemento \"#menu-item-15895 > a > span\" con el texto \"Multas Juzgados\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 19,
-            "name": "que se encontró un elemento \"#menu-item-15690 > a > span\" con el texto \"Multas SUBTEL\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 20,
-            "name": "que se encontró un elemento \"#menu-item-15694 > a > span\" con el texto \"Multas Ley de Transparencia\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 5000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 21,
-            "name": "que se encontró un elemento \"#menu-item-15683 > a > span\" con el texto \"Pago de Multas Aplicadas por Servicio Público\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 23,
-            "name": "que se encontró un elemento \"#menu-item-16938 > a > span\" con el texto \"Pagar cuotas de deuda Ex CORA\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 24,
-            "name": "que se encontró un elemento \"#menu-item-17223 > a > span\" con el texto \"Pagar cuotas de Crédito Fiscal Universitario\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 5000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 25,
-            "name": "que se encontró un elemento \"#menu-item-16757 > a > span\" con el texto \"Solicitar consignar deudas morosas por oferta de pago rechazada\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 26,
-            "name": "que se encontró un elemento \"#menu-item-16939 > a > span\" con el texto \"Pagar Arrendamiento de Predios Urbanos\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 27,
-            "name": "que se encontró un elemento \"#menu-item-16936 > a > span\" con el texto \"Pagar en Moneda Extranjera\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 29,
-            "name": "que se encontró un elemento \"#menu-item-15639 > a > span\" con el texto \"Subsidio de Ley 20.378\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 5000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 30,
-            "name": "que se encontró un elemento \"#menu-item-15629 > a > span\" con el texto \"SERNAPESCA Pago Informe Ambiental\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 31,
-            "name": "que se encontró un elemento \"#menu-item-15697 > a > span\" con el texto \"Concesiones Marítimas\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 5000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 32,
-            "name": "que se encontró un elemento \"#menu-item-16474 > a > span\" con el texto \"Reintegro de Instituciones\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 33,
-            "name": "que se encontró un elemento \"#menu-item-22135 > a > span\" con el texto \"Recaudación Fondo de Estabilización de Tarifas Eléctricas Ley 21.472\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 5000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 34,
-            "name": "que se encontró un elemento \"#menu-item-9635 > a > span\" con el texto \"Ver Todos los Pagos con Declaración\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 4000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 35,
-            "name": "se espera \"2\" segundos",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:144"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 2021000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 37,
-            "name": "se cliquea el selector \"#menu-item-11631 > a > span\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 60000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 38,
-            "name": "que se encontró un elemento \"#post-11619 > div > div > div > div > section > div > div > div > div > div > section.elementor-section.elementor-inner-section.elementor-element.elementor-element-18b0b23.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div.elementor-element.elementor-element-8e25831.elementor-widget.elementor-widget-heading > div > h1\" con el texto \"Nueva Forma de Pagar tus Multas y Patentes\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 2109000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 39,
-            "name": "que se encontró un elemento \"#post-11619 > div > div > div > div > section > div > div > div > div > div > section.elementor-section.elementor-inner-section.elementor-element.elementor-element-18b0b23.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div.elementor-element.elementor-element-dfaf347.elementor-widget.elementor-widget-text-editor > div > div > p\" con el texto \"Te facilitamos la forma de pagar tus multas y patentes de los distintos servicios públicos.\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 61000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 40,
-            "name": "se espera \"2\" segundos",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:144"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 2002000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 42,
-            "name": "se cliquea el selector \"#menu-item-949 > a\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
+              "location": "suite\\steps\\simple.steps.js:20"
             },
             "result": {
               "status": "passed",
@@ -470,11 +107,50 @@
           },
           {
             "arguments": [],
-            "keyword": "When ",
-            "line": 43,
-            "name": "se cliquea el selector \"#menu-item-2486 > a\"",
+            "keyword": "And ",
+            "line": 11,
+            "name": "se espera \"1\" segundos",
             "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
+              "location": "suite\\steps\\simple.steps.js:144"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1016000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "que se encontró un elemento \"#menu-item-2496 > span > span\" con el texto \"CONTRIBUCIONES\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "que se encontró un elemento \"#menu-item-14396 > a > span\" con el texto \"Pago de Contribuciones\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 6000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "que se cliquea el elemento \"span\" con el texto \"Pago de Contribuciones\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:20"
             },
             "result": {
               "status": "passed",
@@ -483,132 +159,131 @@
           },
           {
             "arguments": [],
-            "keyword": "When ",
-            "line": 44,
-            "name": "se cliquea el selector \"#menu-item-11632 > a > span\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 57000000
-            }
-          },
-          {
-            "arguments": [],
             "keyword": "And ",
-            "line": 45,
-            "name": "que se encontró un elemento \"#post-11619 > div > div > div > div > section > div > div > div > div > div > section.elementor-section.elementor-inner-section.elementor-element.elementor-element-18b0b23.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div.elementor-element.elementor-element-8e25831.elementor-widget.elementor-widget-heading > div > h1\" con el texto \"Nueva Forma de Pagar tus Multas y Patentes\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1885000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 46,
-            "name": "que se encontró un elemento \"#post-11619 > div > div > div > div > section > div > div > div > div > div > section.elementor-section.elementor-inner-section.elementor-element.elementor-element-18b0b23.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div.elementor-element.elementor-element-dfaf347.elementor-widget.elementor-widget-text-editor > div > div > p\" con el texto \"Te facilitamos la forma de pagar tus multas y patentes de los distintos servicios públicos.\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:102"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 873000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 47,
-            "name": "se espera \"2\" segundos",
+            "line": 15,
+            "name": "se espera \"1\" segundos",
             "match": {
               "location": "suite\\steps\\simple.steps.js:144"
             },
             "result": {
               "status": "passed",
-              "duration": 2011000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 49,
-            "name": "se cliquea el selector \"#menu-item-949 > a\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 49000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 50,
-            "name": "se cliquea el selector \"#menu-item-2486 > a\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 48000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 51,
-            "name": "se cliquea el selector \"#menu-item-15130 > a > span\"",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:38"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 61000000
+              "duration": 1001000000
             }
           },
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 52,
-            "name": "se espera \"2\" segundos",
-            "match": {
-              "location": "suite\\steps\\simple.steps.js:144"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 2003000000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 53,
-            "name": "que se encontró un elemento \"#id-div-idp-titulo > b\" con el texto \"Te damos la bienvenida\"",
+            "line": 16,
+            "name": "que se encontró un elemento \"h1\" con el texto \" Contribuciones\"",
             "match": {
               "location": "suite\\steps\\simple.steps.js:102"
             },
             "result": {
               "status": "passed",
-              "duration": 1020000000
+              "duration": 761000000
             }
           },
           {
             "arguments": [],
-            "keyword": "When ",
-            "line": 54,
-            "name": "se cliquea el elemento de la pagina \"#id-a-idp-sitioTgr > label > strong\"",
+            "keyword": "And ",
+            "line": 17,
+            "name": "que se encontró un elemento \"h2\" con el texto \"¿Qué necesitas hacer?\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 269000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "se cliquea el elemento \"#tgr-wp-contribuciones-pagarenlineasinclave\" con la clase \"primario\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 181000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "se espera \"15\" segundos",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:144"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 15015000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "se cambia a la pestaña \"1\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:153"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 20000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "que se encontró un elemento \"body > app-root > app-main > mdl-layout > div > div > mdl-layout-content > app-agregar > app-agregar-nueva > app-linea-tiempo > div > div > div:nth-child(1) > p\" con el texto \"1. Buscar\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:102"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 22000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 22,
+            "name": "se cliquea el elemento de la pagina \"#mdl-textfield-c016e6fb\"",
             "match": {
               "location": "suite\\steps\\simple.steps.js:32"
             },
             "result": {
-              "status": "passed",
-              "duration": 230000000
+              "status": "failed",
+              "duration": 30004000000,
+              "error_message": "TimeoutError: waiting for selector \"#mdl-textfield-c016e6fb\" failed: timeout 30000ms exceeded\n    at new WaitTask (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\node_modules\\puppeteer\\lib\\DOMWorld.js:549:28)\n    at DOMWorld._waitForSelectorOrXPath (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\node_modules\\puppeteer\\lib\\DOMWorld.js:478:22)\n    at DOMWorld.waitForSelector (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\node_modules\\puppeteer\\lib\\DOMWorld.js:432:17)\n    at Frame.waitForSelector (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\node_modules\\puppeteer\\lib\\FrameManager.js:627:47)\n    at Frame.<anonymous> (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\node_modules\\puppeteer\\lib\\helper.js:112:23)\n    at Page.waitForSelector (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\node_modules\\puppeteer\\lib\\Page.js:1122:29)\n    at BasicPage.PageClick (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\suite\\pages\\basic.page.js:90:26)\n    at TestWorld.clickedByPage (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\suite\\steps\\simple.steps.js:29:31)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 23,
+            "name": "en el elemento \"Input\" con id \"tgr-ng-bbrr-rol\" se ingresa el texto \"668\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:127"
+            },
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "en el elemento \"Input\" con id \"tgr-ng-bbrr-subRol\" se ingresa el texto \"180\"",
+            "match": {
+              "location": "suite\\steps\\simple.steps.js:127"
+            },
+            "result": {
+              "status": "skipped"
             }
           },
           {
@@ -618,8 +293,9 @@
               "location": "suite\\support\\hooks.js:28"
             },
             "result": {
-              "status": "passed",
-              "duration": 0
+              "status": "failed",
+              "duration": 462000000,
+              "error_message": "Error: ENOENT: no such file or directory, open 'C:\\tmp\\Validamos_funcionalidad_de_links_Pago_de_Contribuciones_1699366431159.png'\n  -- ASYNC --\n    at Page.<anonymous> (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\node_modules\\puppeteer\\lib\\helper.js:111:15)\n    at BasicPage.screenshot (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\suite\\pages\\basic.page.js:117:33)\n    at TestWorld.<anonymous> (C:\\Users\\dsanchez\\nodejs_tgr\\libs\\suite\\support\\hooks.js:33:20)"
             }
           }
         ]
