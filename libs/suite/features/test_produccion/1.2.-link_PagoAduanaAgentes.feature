@@ -17,5 +17,3 @@ Scenario: Validamos funcionalidad de links Pago Aduana Agentes
    And que se encontró un elemento "a" con id "tgr-wp-pagoaduanaagentes-recuperarclave" con el texto "¿Necesitas recuperar tu clave?"
    And se espera "5" segundos
    And que se cliquea el elemento "#id_busqueda" en el frame "#tgr-sp-contenedor-iframe-custom > iframe"
-   And que se hace foco a un elemento "#tgr-sp-contenedor-iframe-custom > iframe" con la clase "iframe-responsive"
-   And que en el elemento "#username" se ingresó el texto "17283" en el frame "#tgr-sp-contenedor-iframe-custom > iframe"

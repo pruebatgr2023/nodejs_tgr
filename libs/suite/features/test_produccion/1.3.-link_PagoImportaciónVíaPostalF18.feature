@@ -17,5 +17,3 @@ Scenario: Validamos funcionalidad de links Pago Importación Vía Postal (F18)
    And se espera "30" segundos
    And que se cliquea el elemento "#id_busqueda" en el frame "#tgr-sp-contenedor-iframe > iframe"
    And que se hace foco a un elemento "#tgr-sp-contenedor-iframe > iframe" con la clase "iframe-responsive"
-   And que se cliquea el elemento "body > div > p:nth-child(2)" en el frame "#tgr-sp-contenedor-iframe > iframe"
-   And que en el elemento "#{actionForm.rut}" se ingresó el texto "17283" en el frame "#tgr-sp-contenedor-iframe > iframe"
