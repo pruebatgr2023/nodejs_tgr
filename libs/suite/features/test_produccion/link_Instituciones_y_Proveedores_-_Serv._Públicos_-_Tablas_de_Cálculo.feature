@@ -11,5 +11,5 @@ Scenario: Validamos funcionalidad de links Instituciones y Proveedores - sub lin
    And que se encontró un elemento "#menu-item-6199 > span > span" con el texto "FINANZAS PÚBLICAS"
    When se cliquea el selector "#menu-item-7283 > a"   
    And se espera "3" segundos  
-   And que se encontró un elemento "h2" con el texto "Tablas de Cálculo"
+   And que se encontró un elemento "h2" con el texto "Cálculo de reajuste para Impuestos Morosos pagados este mes"
    And se espera "3" segundos 
