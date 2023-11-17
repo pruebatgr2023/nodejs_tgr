@@ -31,4 +31,4 @@ Scenario: reconocemos elementos menu princial, ingresamo a pago y reconocemos li
     And que se encontró un elemento "#menu-item-16152 > a > span" con el texto "Rectificatoria Impuesto Verde"
     And que se encontró un elemento "#menu-item-4573 > a > span" con el texto "Solicitar Regularización de un Pago No Ingresado al Sistema"
     And que se encontró un elemento "#menu-item-16468 > a > span" con el texto "Venta de Estampillas Exclusivo Poder Judicial"
-    And que se encontró un elemento "#menu-item-5082 > a > span" con el texto "Pago Importación por Viajeros"
+    And que se encontró un elemento "#menu-item-22984 > a > span" con el texto "Convenio Préstamo de Transporte"
