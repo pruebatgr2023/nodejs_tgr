@@ -10,4 +10,4 @@ Scenario: Validamos funcionalidad de links Cobranza y Consultas - Búsqueda de R
    And se espera "2" segundos
    When se cliquea el selector "#menu-item-4697 > a"
    And se espera "3" segundos
-   And que se encontró un elemento "h1" con la clase "elementor-heading-title" con el texto "Búsqueda de Recaudadores Fiscales"
+   And que se encontró un elemento "body > div.elementor.elementor-4616 > div > div > section.elementor-section.elementor-top-section.elementor-element.elementor-element-4288395.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default > div > div > div > div > div > div > div > h1" con el texto "Búsqueda de Recaudadores o Recaudadoras Fiscales"
