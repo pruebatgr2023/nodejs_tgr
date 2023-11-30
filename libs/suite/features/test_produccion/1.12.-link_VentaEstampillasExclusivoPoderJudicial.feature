@@ -14,4 +14,3 @@ Scenario: Validamos funcionalidad de links Venta de Estampillas Exclusivo Poder 
    Then que se cliquea el elemento "span" con el texto "Venta de Estampillas Exclusivo Poder Judicial"
    And se espera "3" segundos
    And que se encontró un elemento "h1" con la clase "titulo-tramite" con el texto "Venta de Estampillas Exclusivo Poder Judicial"
-   And que se encontró un elemento "#content > section > div > fieldset > legend > h4"
