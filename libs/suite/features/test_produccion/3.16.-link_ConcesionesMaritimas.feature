@@ -1,6 +1,7 @@
-Feature: despliegue de link
-concesiones maritimas
-Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú multas, patentes y otros
+Feature: link Pago - MultasPatentesOtros - DECLARACIÓNPAGOSIMULTÁNEO - ConcesionesMaritimas
+          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Concesiones Marítimas
+
+ Scenario: Validamos funcionalidad de links Concesiones Marítimas
     Given que se encuentra en la url "https://www.tgr.cl/"
     And se espera "2" segundos
     When se cliquea el selector "#menu-item-949 > a"  

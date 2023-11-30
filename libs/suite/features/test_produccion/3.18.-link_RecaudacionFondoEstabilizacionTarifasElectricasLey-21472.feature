@@ -1,6 +1,7 @@
-Feature: despliegue de link
-fondo estabilizacion
-Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú multas, patentes y otros
+Feature: link Pago - MultasPatentesOtros - DECLARACIÓNPAGOSIMULTÁNEO - RecaudacionFondoEstabilizacionTarifasElectricasLey-21472
+          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Recaudación Fondo de Estabilización de Tarifas Eléctricas Ley 21.472
+
+ Scenario: Validamos funcionalidad de links Recaudación Fondo de Estabilización de Tarifas Eléctricas Ley 21.472
     Given que se encuentra en la url "https://www.tgr.cl/"
     And se espera "2" segundos
     When se cliquea el selector "#menu-item-949 > a"  

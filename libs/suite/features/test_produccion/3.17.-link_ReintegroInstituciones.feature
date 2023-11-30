@@ -1,6 +1,7 @@
-Feature: despliegue de link
-reintegro intituciones
-Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú multas, patentes y otros
+Feature: link Pago - MultasPatentesOtros - DECLARACIÓNPAGOSIMULTÁNEO - ReintegroInstituciones
+          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Reintegro de Instituciones
+
+ Scenario: Validamos funcionalidad de links Reintegro de Instituciones
     Given que se encuentra en la url "https://www.tgr.cl/"
     And se espera "2" segundos
     When se cliquea el selector "#menu-item-949 > a"  

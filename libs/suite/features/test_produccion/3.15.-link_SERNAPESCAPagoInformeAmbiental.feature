@@ -1,6 +1,7 @@
-Feature: despliegue de link
-sernapesca
-Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú multas, patentes y otros
+Feature: link Pago - MultasPatentesOtros - DECLARACIÓNPAGOSIMULTÁNEO - SERNAPESCAPagoInformeAmbiental
+          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link SERNAPESCA Pago Informe Ambiental
+
+ Scenario: Validamos funcionalidad de links SERNAPESCA Pago Informe Ambiental
     Given que se encuentra en la url "https://www.tgr.cl/"
     And se espera "2" segundos
     When se cliquea el selector "#menu-item-949 > a"  
