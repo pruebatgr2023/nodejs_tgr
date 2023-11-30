@@ -1,8 +1,7 @@
-Feature:Link Pagos - Convenios de Pago - ExclusionesSii
-  Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Pagos-Convenios de Pago-ExclusionesSii
-
- @run
- Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú pago de convenios
+Feature: link Pago - ConveniosPago - CONSULTAS - ExclusionesSII
+          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Exclusiones SII
+          
+ Scenario: Validamos funcionalidad de links Exclusiones SII
    Given que se encuentra en la url "https://www.tgr.cl/"
    And se espera "2" segundos 
    And se encuentra un elemento "#menu-item-949 > a > span:nth-child(1)" con el texto "Pagos"

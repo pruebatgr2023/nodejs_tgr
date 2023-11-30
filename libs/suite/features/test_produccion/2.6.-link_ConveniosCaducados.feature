@@ -1,8 +1,7 @@
-Feature: Link Pagos - Convenios de Pago - ConveniosCaducados
- Vamos a tgr.cl
-
- @run
- Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú pago de convenios
+Feature: link Pago - ConveniosPago - CONSULTAS - ConveniosCaducados
+          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Convenios Caducados
+          
+ Scenario: Validamos funcionalidad de links Convenios Caducados
    Given que se encuentra en la url "https://www.tgr.cl/"
    And se espera "2" segundos 
    And se encuentra un elemento "#menu-item-949 > a > span:nth-child(1)" con el texto "Pagos"

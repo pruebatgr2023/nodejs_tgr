@@ -1,4 +1,4 @@
-Feature: link Pago - ConvenioPagos - CREARCONVENION - CrearConvenioDeudasContribuciones
+Feature: link Pago - ConveniosPago - CREARCONVENIO - CrearConvenioDeudasContribuciones
           Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Crear Convenio de Deudas Contribuciones
           
  Scenario: Validamos funcionalidad de links Crear Convenio de Deudas Contribuciones

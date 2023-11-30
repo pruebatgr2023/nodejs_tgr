@@ -1,8 +1,7 @@
-Feature: Link Pagos - Convenios de Pago - PagarCuotaAjuste
-  Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Pagos-Convenios de Pago-PagarCuotaAjuste
-
- @run
- Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú pago de convenios
+Feature: link Pago - ConveniosPago - CONSULTAS - ConveniosVigentes
+          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Convenios Vigentes
+          
+ Scenario: Validamos funcionalidad de links Convenios Vigentes
    Given que se encuentra en la url "https://www.tgr.cl/"
    And se espera "2" segundos 
    And se encuentra un elemento "#menu-item-949 > a > span:nth-child(1)" con el texto "Pagos"
@@ -12,12 +11,10 @@ Feature: Link Pagos - Convenios de Pago - PagarCuotaAjuste
    And se espera "3" segundos
    And se cliquea el elemento "a" con el texto "Convenios de pago"
    And se espera "3" segundos
-   And se encuentra un elemento "#menu-item-15640 > a > span" con el texto "Pagar Cuota de Ajuste"
+   And se encuentra un elemento "#menu-item-15797> a > span" con el texto "Convenios Vigentes"
    And se espera "3" segundos
-   And se cliquea el elemento "a" con el texto "Pagar Cuota de Ajuste"
+   And se cliquea el elemento "a" con el texto "Convenios Vigentes"
    And se espera "5" segundos
-   And se encuentra un elemento "#id-div-idp-titulo > b" con el texto "Te damos la bienvenida"
-   And se espera "3" segundos
    And se encuentra un elemento "a" con id "id-a-idp-sitioTgr" con el texto "Ir a tgr.cl"
    And se espera "5" segundos
    Given que se cliquea el elemento "a" con el texto "Ir a tgr.cl"

@@ -1,4 +1,4 @@
-Feature: link Pago - ConvenioPagos - CREARCONVENION - CrearConvenioDeudasFiscales
+Feature: link Pago - ConveniosPago - CREARCONVENIO - CrearConvenioDeudasFiscales
           Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Crear Convenio de Deudas Fiscales
 
  Scenario: Validamos funcionalidad de links Crear Convenio de Deudas Fiscales
