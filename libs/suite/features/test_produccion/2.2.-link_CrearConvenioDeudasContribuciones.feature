@@ -1,9 +1,7 @@
-Feature: Link Pagos - Convenios de Pago - CrearConvFiscal
-  Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Pagos-Convenios de Pago-CrearConvenioTerritorial
- Vamos a tgr.cl
-
- @run
- Scenario: reconocemos elementos menu princial, ingresamos a pago y reconocemos links del menú pago de convenios
+Feature: link Pago - ConvenioPagos - CREARCONVENION - CrearConvenioDeudasContribuciones
+          Yo como usuario quiero entrar al portal TGR y Verificar funcionalidad de link Crear Convenio de Deudas Contribuciones
+          
+ Scenario: Validamos funcionalidad de links Crear Convenio de Deudas Contribuciones
    Given que se encuentra en la url "https://www.tgr.cl/"
    And se espera "2" segundos 
    And se encuentra un elemento "#menu-item-949 > a > span:nth-child(1)" con el texto "Pagos"
